@@ -2,8 +2,6 @@ package com.projeto.catalog.dto;
 
 import com.projeto.catalog.entities.Category;
 
-import com.projeto.catalog.entities.Category;
-
 public class CategoryDTO {
 	private Long id;
 	private String name;
@@ -16,8 +14,8 @@ public class CategoryDTO {
 		this.id = id;
 		this.name = name;
 	}
-	
-	public CategoryDTO(Category entity) { 
+
+	public CategoryDTO(Category entity) {
 		id = entity.getId();
 		name = entity.getName();
 	}

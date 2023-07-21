@@ -20,6 +20,11 @@ public class CategoryDTO {
 		name = entity.getName();
 	}
 
+	@Override
+	public String toString() {
+		return "CategoryDTO [id=" + id + ", name=" + name + "]";
+	}
+
 	public Long getId() {
 		return id;
 	}

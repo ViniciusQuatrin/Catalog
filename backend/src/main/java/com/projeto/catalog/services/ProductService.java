@@ -10,8 +10,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.projeto.catalog.dto.CategoryDTO;
 import com.projeto.catalog.dto.ProductDTO;
+import com.projeto.catalog.entities.Category;
 import com.projeto.catalog.entities.Product;
+import com.projeto.catalog.repositories.CategoryRepository;
 import com.projeto.catalog.repositories.ProductRepository;
 import com.projeto.catalog.services.exceptions.DatabaseException;
 import com.projeto.catalog.services.exceptions.ResourceNotFoundException;
@@ -23,6 +26,9 @@ public class ProductService {
 
 	@Autowired
 	private ProductRepository repository;
+	
+	@Autowired
+	private CategoryRepository categoryRepository;
 
 	@Transactional(readOnly = true)
 	public Page<ProductDTO> findAllPaged(PageRequest pageRequest) {
@@ -40,7 +46,7 @@ public class ProductService {
 	@Transactional
 	public ProductDTO insert(ProductDTO dto) {
 		Product entity = new Product();
-//		entity.setName(dto.getName());
+		copyDtoToEntity(dto, entity);
 		entity = repository.save(entity);
 		return new ProductDTO(entity);
 	}
@@ -49,25 +55,38 @@ public class ProductService {
 	public ProductDTO update(Long Id, ProductDTO dto) {
 		try {
 			Product entity = repository.getReferenceById(Id);
-//			entity.setName(dto.getName());
+			copyDtoToEntity(dto, entity);
 			entity = repository.save(entity);
 			return new ProductDTO(entity);
-		} catch (EntityNotFoundException e) { 
+		} catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException("id not found " + Id);
 		}
 	}
-	
-	
+
 	public void delete(Long Id) {
-		if(!repository.existsById(Id)) { 
+		if (!repository.existsById(Id)) {
 			throw new ResourceNotFoundException("id not found");
 		}
-		try { 
+		try {
 			repository.deleteById(Id);
-		} catch (EmptyResultDataAccessException e) { 
+		} catch (EmptyResultDataAccessException e) {
 			throw new ResourceNotFoundException("id not found" + Id);
-		} catch (DataIntegrityViolationException e) { 
+		} catch (DataIntegrityViolationException e) {
 			throw new DatabaseException("Integraty violation");
+		}
+	}
+
+	private void copyDtoToEntity(ProductDTO dto, Product entity) {
+		entity.setName(dto.getName());
+		entity.setDescription(dto.getDescription());
+		entity.setImgUrl(dto.getImgUrl());
+		entity.setDate(dto.getDate());
+		entity.setPrice(dto.getPrice());
+		
+		entity.getCategories().clear();
+		for(CategoryDTO cDto : dto.getCategories()) { 
+			Category category = categoryRepository.getReferenceById(cDto.getId());
+			entity.getCategories().add(category);
 		}
 	}
 

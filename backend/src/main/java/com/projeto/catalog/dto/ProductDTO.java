@@ -1,6 +1,5 @@
 package com.projeto.catalog.dto;
 
-import java.io.Serializable;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +8,7 @@ import java.util.Set;
 import com.projeto.catalog.entities.Category;
 import com.projeto.catalog.entities.Product;
 
-public class ProductDTO implements Serializable {
-	private static final long serialVersionUID = 1L;
+public class ProductDTO {
 
 	private Long id;
 	private String name;

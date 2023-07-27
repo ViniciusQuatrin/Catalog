@@ -37,6 +37,20 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
+	public void findByIdShouldReturnNotNullWhenIdExists() { 
+		Optional<Product> result = repository.findById(id);
+		
+		Assertions.assertNotNull(result);
+	}
+	
+	@Test
+	public void findByIdShouldReturnNullWhenIdNotExists() { 
+		Optional<Product> result = repository.findById(1000L);
+		
+		Assertions.assertFalse(result.isPresent());
+	}
+	
+	@Test
 	public void deleteShouldDeleteObjectWhenIdExists() { 
 		repository.deleteById(id);
 		
@@ -45,12 +59,12 @@ public class ProductRepositoryTest {
 		Assertions.assertFalse(result.isPresent());
 	}	
 	
-//	@Test
-//	public void deleteShouldThrowEmptyResultNotFoundExceptionWhenIdNotExists() { 
-//		long nonExistingId = 1000000000L;
-//		
-//		Assertions.assertThrows(EmptyResultDataAccessException.class, () -> {
-//			repository.deleteById(nonExistingId);
-//		});
-//	}
+	/*
+	 * @Test public void
+	 * deleteShouldThrowEmptyResultNotFoundExceptionWhenIdNotExists() { long
+	 * nonExistingId = 1000000000L;
+	 * 
+	 * Assertions.assertThrows(EmptyResultDataAccessException.class, () -> {
+	 * repository.deleteById(nonExistingId); }); }
+	 */
 }

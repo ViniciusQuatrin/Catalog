@@ -64,9 +64,6 @@ public class ProductService {
 	}
 
 	public void delete(Long Id) {
-		if (!repository.existsById(Id)) {
-			throw new ResourceNotFoundException("id not found");
-		}
 		try {
 			repository.deleteById(Id);
 		} catch (EmptyResultDataAccessException e) {
